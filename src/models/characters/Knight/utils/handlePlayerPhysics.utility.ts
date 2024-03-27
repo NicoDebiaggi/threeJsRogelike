@@ -1,12 +1,13 @@
-import { RapierRigidBody, euler, quat } from '@react-three/rapier'
-import { RefObject } from 'react'
 import { useKeyboardControls } from '@react-three/drei'
-import { Controls, animationIndexDictionary } from '@/dataModels'
 import { useFrame } from '@react-three/fiber'
-import { useDispatch, useSelector } from 'react-redux'
+import { euler, quat, RapierRigidBody } from '@react-three/rapier'
 import { Dispatch, UnknownAction } from '@reduxjs/toolkit'
-import { setAnimationDuration, setAnimationIndex, setBlockPlaying, setHitPlaying, setNextAnimationIndex, setPosition } from '@/redux/slices'
+import { RefObject } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { animationIndexDictionary, Controls } from '@/dataModels'
 import { Istore } from '@/redux'
+import { setAnimationDuration, setAnimationIndex, setBlockPlaying, setHitPlaying, setNextAnimationIndex, setPosition } from '@/redux/slices'
 
 const handleMovement = ({
   body,

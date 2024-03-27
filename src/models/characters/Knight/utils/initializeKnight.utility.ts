@@ -1,11 +1,13 @@
-import * as THREE from 'three'
 import { useAnimations } from '@react-three/drei'
 import { MutableRefObject, useEffect } from 'react'
-import { GLTFResult, GLTFAction } from '../Knight.character'
-import { setAnimations, setHandSlotsFullList, setHitPlaying, setNextAnimationIndex, setToogableElements } from '@/redux/slices'
 import { useDispatch, useSelector } from 'react-redux'
-import { Istore } from '@/redux/store'
+import * as THREE from 'three'
+
 import { animationIndexDictionary } from '@/dataModels'
+import { setAnimations, setHandSlotsFullList, setHitPlaying, setNextAnimationIndex, setToogableElements } from '@/redux/slices'
+import { Istore } from '@/redux/store'
+
+import { GLTFAction, GLTFResult } from '../Knight.character'
 
 interface initializeKightProps {
   group: MutableRefObject<THREE.Group | null>

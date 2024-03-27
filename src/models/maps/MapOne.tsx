@@ -1,7 +1,8 @@
-import * as THREE from 'three'
 import { useGLTF } from '@react-three/drei'
-import { GLTF } from 'three-stdlib'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
+import * as THREE from 'three'
+import { GLTF } from 'three-stdlib'
+
 import { WallTorch } from '@/models'
 
 type GLTFResult = GLTF & {

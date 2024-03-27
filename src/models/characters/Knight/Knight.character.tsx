@@ -1,9 +1,10 @@
-import * as THREE from 'three'
-import { useRef, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
-import { GLTF } from 'three-stdlib'
-import { handlePlayerPhysics, initializeKnight } from '../index'
 import { CapsuleCollider, RapierRigidBody, RigidBody } from '@react-three/rapier'
+import { useRef, useState } from 'react'
+import * as THREE from 'three'
+import { GLTF } from 'three-stdlib'
+
+import { handlePlayerPhysics, initializeKnight } from '../index'
 
 export type GLTFResult = GLTF & {
   nodes: {
@@ -129,10 +130,10 @@ const Knight = (props: JSX.IntrinsicElements['group']) => {
         enabledRotations={[false, true, false]}
         position={[0, 0, 0]}
         colliders={false}
-        onCollisionEnter={(e) => {
+        onCollisionEnter={e => {
           if (e.colliderObject?.name === 'floor') setIsOnFloor(true)
         }}
-        onCollisionExit={(e) => {
+        onCollisionExit={e => {
           if (e.colliderObject?.name === 'floor') setIsOnFloor(false)
         }}
       >

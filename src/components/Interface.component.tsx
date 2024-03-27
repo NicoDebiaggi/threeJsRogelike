@@ -1,8 +1,9 @@
 import { Affix } from '@mantine/core'
-import { Leva, useControls, folder } from 'leva'
+import { folder, Leva, useControls } from 'leva'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { Istore } from '@/redux'
-import { setToogableElements, setHandSlots, setAnimationIndex } from '@/redux/slices'
+import { setAnimationIndex, setHandSlots, setToogableElements } from '@/redux/slices'
 
 const Interface = () => {
   const { animations, animationIndex, toogableElements, handSlotsFullList, handSlots } = useSelector((state: Istore) => state.player)

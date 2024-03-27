@@ -1,5 +1,5 @@
-import * as THREE from 'three'
 import { useGLTF } from '@react-three/drei'
+import * as THREE from 'three'
 import { GLTF } from 'three-stdlib'
 
 type GLTFResult = GLTF & {

@@ -1,1 +1,1 @@
-export * from './WallTorch';
+export * from './WallTorch'

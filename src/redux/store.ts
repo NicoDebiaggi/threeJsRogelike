@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { playerReducer } from './slices'
+
 import { playerState } from '@/dataModels'
+
+import { playerReducer } from './slices'
 
 export interface Istore {
   player: playerState

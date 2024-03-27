@@ -1,13 +1,15 @@
+import { KeyboardControls, KeyboardControlsEntry } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
+import { Physics } from '@react-three/rapier'
+import { Perf } from 'r3f-perf'
+import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
+
+import { Controls } from '@/dataModels'
 import Main from '@/scenes/Main.scene'
+
 import { Interface } from './components'
 import { Istore } from './redux'
-import { Physics } from '@react-three/rapier'
-import { KeyboardControls, KeyboardControlsEntry } from '@react-three/drei'
-import { Controls } from '@/dataModels'
-import { useMemo } from 'react'
-import { Perf } from 'r3f-perf'
 
 const App = () => {
   const animations = useSelector((state: Istore) => state.player.animations)
@@ -21,8 +23,8 @@ const App = () => {
       { name: Controls.jump, keys: ['Space'] },
       { name: Controls.dodge, keys: ['ShiftLeft'] },
       { name: Controls.pause, keys: ['Escape'] },
-      { name: Controls.attack, keys: ['ClickLeft', 'KeyJ']},
-      { name: Controls.block, keys: ['ClickRight', 'KeyK']}
+      { name: Controls.attack, keys: ['ClickLeft', 'KeyJ'] },
+      { name: Controls.block, keys: ['ClickRight', 'KeyK'] }
     ],
     []
   )

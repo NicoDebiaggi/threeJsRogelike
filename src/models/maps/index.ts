@@ -1,1 +1,1 @@
-export * from './MapOne';
+export * from './MapOne'

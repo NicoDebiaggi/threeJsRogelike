@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+
 import { playerState } from '@/dataModels'
 
 const initialState: playerState = {

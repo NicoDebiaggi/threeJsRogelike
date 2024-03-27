@@ -1,8 +1,9 @@
-import * as THREE from 'three'
-import { Suspense } from 'react'
 import { OrbitControls } from '@react-three/drei'
-import { useSelector } from 'react-redux'
 import { useThree } from '@react-three/fiber'
+import { Suspense } from 'react'
+import { useSelector } from 'react-redux'
+import * as THREE from 'three'
+
 import { Knight, MapOne } from '@/models'
 import { Istore } from '@/redux'
 
@@ -29,7 +30,7 @@ const Main = () => {
       <ambientLight />
       <directionalLight intensity={0.7} position={[-5, 5, 5]} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
       <Suspense fallback={null}>
-       {/*  <group position={[0, -1, 0]}>
+        {/*  <group position={[0, -1, 0]}>
           <Knight />
         </group> */}
         <MapOne />

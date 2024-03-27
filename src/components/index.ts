@@ -1,1 +1,1 @@
-export { default as Interface } from './Interface.component';
+export { default as Interface } from './Interface.component'
