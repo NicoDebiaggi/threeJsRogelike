@@ -31,7 +31,7 @@ const App = () => {
 
   return (
     <KeyboardControls map={map}>
-      <Canvas camera={{ fov: 90 }} shadows>
+      <Canvas camera={{ fov: 50 }} shadows>
         <Perf />
         <Physics debug gravity={[0, -9.81, 0]}>
           <Main />

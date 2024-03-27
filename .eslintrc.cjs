@@ -37,6 +37,7 @@ module.exports = {
       }
     }
   },
+  include: ['src/**/*'],
   rules: {
     'prettier/prettier': ['error', { singleQuote: true, endOfLine: 'auto', jsxSingleQuote: true }],
     'import/no-extraneous-dependencies': OFF,
@@ -63,6 +64,7 @@ module.exports = {
     'react/jsx-pascal-case': ERROR,
     'react/require-default-props': OFF,
     'react/react-in-jsx-scope': OFF,
+    'react/no-unknown-property': OFF,
     'simple-import-sort/imports': ERROR,
     'simple-import-sort/exports': ERROR,
     'no-use-before-define': OFF,

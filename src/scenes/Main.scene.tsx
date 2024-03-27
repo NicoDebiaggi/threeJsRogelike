@@ -8,11 +8,11 @@ import { Knight, MapOne } from '@/models'
 import { Istore } from '@/redux'
 
 const cameraBaseConfig = {
-  position: [0, 9, -5]
+  position: [0, 13, -13]
 }
 
 const Main = () => {
-  /* const position = useSelector((state: Istore) => state.player.position)
+  const position = useSelector((state: Istore) => state.player.position)
 
   useThree(({ camera, scene }) => {
     scene.background = new THREE.Color(0x222222)
@@ -21,18 +21,18 @@ const Main = () => {
       cameraBaseConfig.position[1] + position.y,
       cameraBaseConfig.position[2] + position.z
     ),
-      camera.lookAt(position.x, position.y, position.z)
-  }) */
+    camera.lookAt(position.x, position.y, position.z)
+  })
 
   return (
     <>
-      {<OrbitControls />}
+      {/* <OrbitControls /> */}
       <ambientLight />
       <directionalLight intensity={0.7} position={[-5, 5, 5]} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
       <Suspense fallback={null}>
-        {/*  <group position={[0, -1, 0]}>
+        <group position={[0, -1, 0]}>
           <Knight />
-        </group> */}
+        </group>
         <MapOne />
       </Suspense>
     </>
