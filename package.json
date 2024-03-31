@@ -22,14 +22,15 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.0",
-    "three": "^0.162.0",
-    "three.quarks": "^0.11.2",
+    "three": "^0.163.0",
+    "three-nebula": "^10.0.3",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@types/three": "^0.162.0",
+    "@types/three-nebula": "^10.0.4",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
     "@vitejs/plugin-react": "^4.2.1",

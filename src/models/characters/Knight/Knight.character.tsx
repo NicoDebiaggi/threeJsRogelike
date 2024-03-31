@@ -7,6 +7,7 @@ import { GLTF } from 'three-stdlib'
 import { handlePlayerPhysics, initializeKnight, ParticleSystem } from '../index'
 import { useSelector } from 'react-redux'
 import { Istore } from '@/redux'
+import { BlueFlame } from './utils/ThreeNebulaTest'
 
 export type GLTFResult = GLTF & {
   nodes: {
@@ -135,6 +136,7 @@ const Knight = (props: JSX.IntrinsicElements['group']) => {
         position={new THREE.Vector3(position.x, position.y, position.z)}
         rotation={new THREE.Euler(bodyEulerRot.x, bodyEulerRot.y, bodyEulerRot.z)}
       /> */}
+      <BlueFlame />
       <group ref={group} {...props} dispose={null}>
         <RigidBody
           ref={rigidBody}
