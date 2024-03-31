@@ -12,7 +12,7 @@ const cameraBaseConfig = {
 }
 
 const Main = () => {
-  const position = useSelector((state: Istore) => state.player.position)
+  /* const position = useSelector((state: Istore) => state.player.position)
 
   useThree(({ camera, scene }) => {
     scene.background = new THREE.Color(0x222222)
@@ -22,11 +22,11 @@ const Main = () => {
       cameraBaseConfig.position[2] + position.z
     ),
     camera.lookAt(position.x, position.y, position.z)
-  })
+  }) */
 
   return (
     <>
-      {/* <OrbitControls /> */}
+      {<OrbitControls />}
       <ambientLight />
       <directionalLight intensity={0.7} position={[-5, 5, 5]} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
       <Suspense fallback={null}>
