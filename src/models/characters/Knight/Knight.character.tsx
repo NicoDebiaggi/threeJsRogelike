@@ -1,10 +1,12 @@
 import { useGLTF } from '@react-three/drei'
-import { CapsuleCollider, RapierRigidBody, RigidBody } from '@react-three/rapier'
+import { CapsuleCollider, euler, quat, RapierRigidBody, RigidBody } from '@react-three/rapier'
 import { useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTF } from 'three-stdlib'
 
-import { handlePlayerPhysics, initializeKnight } from '../index'
+import { handlePlayerPhysics, initializeKnight, ParticleSystem } from '../index'
+import { useSelector } from 'react-redux'
+import { Istore } from '@/redux'
 
 export type GLTFResult = GLTF & {
   nodes: {
@@ -120,67 +122,78 @@ const Knight = (props: JSX.IntrinsicElements['group']) => {
   const { nodes, materials, animations } = useGLTF('./models/Knight.glb') as GLTFResult
   const rigidBody = useRef<RapierRigidBody>(null)
   const [isOnFloor, setIsOnFloor] = useState(false)
+  const { position, particlesActive } = useSelector((state: Istore) => state.player)
   initializeKnight({ group, animations, nodes })
   handlePlayerPhysics({ body: rigidBody, isOnFloor })
+  const bodyEulerRot = euler().setFromQuaternion(quat(rigidBody.current?.rotation()), 'YXZ')
+
   return (
-    <group ref={group} {...props} dispose={null}>
-      <RigidBody
-        ref={rigidBody}
-        type='dynamic'
-        enabledRotations={[false, true, false]}
-        position={[0, 0, 0]}
-        colliders={false}
-        onCollisionEnter={e => {
-          if (e.colliderObject?.name === 'floor') setIsOnFloor(true)
-        }}
-        onCollisionExit={e => {
-          if (e.colliderObject?.name === 'floor') setIsOnFloor(false)
-        }}
-      >
-        <CapsuleCollider args={[0.55, 0.65]} position={[0, 1.2, 0]} />
-        <group name='Scene'>
-          <group name='Rig'>
-            <primitive object={nodes.root} />
-            <skinnedMesh
-              name='Knight_ArmLeft'
-              geometry={nodes.Knight_ArmLeft.geometry}
-              material={materials.knight_texture}
-              skeleton={nodes.Knight_ArmLeft.skeleton}
-            />
-            <skinnedMesh
-              name='Knight_ArmRight'
-              geometry={nodes.Knight_ArmRight.geometry}
-              material={materials.knight_texture}
-              skeleton={nodes.Knight_ArmRight.skeleton}
-            />
-            <skinnedMesh
-              name='Knight_Body'
-              geometry={nodes.Knight_Body.geometry}
-              material={materials.knight_texture}
-              skeleton={nodes.Knight_Body.skeleton}
-            />
-            <skinnedMesh
-              name='Knight_Head'
-              geometry={nodes.Knight_Head.geometry}
-              material={materials.knight_texture}
-              skeleton={nodes.Knight_Head.skeleton}
-            />
-            <skinnedMesh
-              name='Knight_LegLeft'
-              geometry={nodes.Knight_LegLeft.geometry}
-              material={materials.knight_texture}
-              skeleton={nodes.Knight_LegLeft.skeleton}
-            />
-            <skinnedMesh
-              name='Knight_LegRight'
-              geometry={nodes.Knight_LegRight.geometry}
-              material={materials.knight_texture}
-              skeleton={nodes.Knight_LegRight.skeleton}
-            />
+    <>
+      {/* <ParticleSystem
+        count={100}
+        active={particlesActive}
+        position={new THREE.Vector3(position.x, position.y, position.z)}
+        rotation={new THREE.Euler(bodyEulerRot.x, bodyEulerRot.y, bodyEulerRot.z)}
+      /> */}
+      <group ref={group} {...props} dispose={null}>
+        <RigidBody
+          ref={rigidBody}
+          type='dynamic'
+          enabledRotations={[false, true, false]}
+          position={[0, 0, 0]}
+          colliders={false}
+          onCollisionEnter={e => {
+            if (e.colliderObject?.name === 'floor') setIsOnFloor(true)
+          }}
+          onCollisionExit={e => {
+            if (e.colliderObject?.name === 'floor') setIsOnFloor(false)
+          }}
+        >
+          <CapsuleCollider args={[0.55, 0.65]} position={[0, 1.2, 0]} />
+          <group name='Scene'>
+            <group name='Rig'>
+              <primitive object={nodes.root} />
+              <skinnedMesh
+                name='Knight_ArmLeft'
+                geometry={nodes.Knight_ArmLeft.geometry}
+                material={materials.knight_texture}
+                skeleton={nodes.Knight_ArmLeft.skeleton}
+              />
+              <skinnedMesh
+                name='Knight_ArmRight'
+                geometry={nodes.Knight_ArmRight.geometry}
+                material={materials.knight_texture}
+                skeleton={nodes.Knight_ArmRight.skeleton}
+              />
+              <skinnedMesh
+                name='Knight_Body'
+                geometry={nodes.Knight_Body.geometry}
+                material={materials.knight_texture}
+                skeleton={nodes.Knight_Body.skeleton}
+              />
+              <skinnedMesh
+                name='Knight_Head'
+                geometry={nodes.Knight_Head.geometry}
+                material={materials.knight_texture}
+                skeleton={nodes.Knight_Head.skeleton}
+              />
+              <skinnedMesh
+                name='Knight_LegLeft'
+                geometry={nodes.Knight_LegLeft.geometry}
+                material={materials.knight_texture}
+                skeleton={nodes.Knight_LegLeft.skeleton}
+              />
+              <skinnedMesh
+                name='Knight_LegRight'
+                geometry={nodes.Knight_LegRight.geometry}
+                material={materials.knight_texture}
+                skeleton={nodes.Knight_LegRight.skeleton}
+              />
+            </group>
           </group>
-        </group>
-      </RigidBody>
-    </group>
+        </RigidBody>
+      </group>
+    </>
   )
 }
 

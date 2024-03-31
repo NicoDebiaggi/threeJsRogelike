@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as THREE from 'three'
 
 import { animationIndexDictionary } from '@/dataModels'
-import { setAnimations, setHandSlotsFullList, setHitPlaying, setNextAnimationIndex, setToogableElements } from '@/redux/slices'
+import { setAnimations, setHandSlotsFullList, setNextAnimationIndex, setToogableElements } from '@/redux/slices'
 import { Istore } from '@/redux/store'
 
 import { GLTFAction, GLTFResult } from '../Knight.character'
@@ -17,7 +17,7 @@ interface initializeKightProps {
 
 export const initializeKnight = ({ group, animations, nodes }: initializeKightProps) => {
   const dispatch = useDispatch()
-  const { animationIndex, toogableElements, handSlots, animationDuration, nextAnimationIndex, hitPlaying, blockPlaying } = useSelector(
+  const { animationIndex, toogableElements, handSlots, animationDuration, nextAnimationIndex } = useSelector(
     (state: Istore) => state.player
   )
   const { actions, names } = useAnimations(animations, group)
@@ -63,28 +63,6 @@ export const initializeKnight = ({ group, animations, nodes }: initializeKightPr
       actions[names[animationIndex]]?.fadeOut(FADE_DURATION)
     }
   }, [animationIndex])
-
-  useEffect(() => {
-    const hitAction = actions[names[hitAnimationIndex]]
-    if (hitPlaying && hitAction) {
-      hitAction.repetitions = 0
-      hitAction
-        .reset()
-        .fadeIn(FADE_DURATION)
-        .play()
-        .getMixer()
-        .addEventListener('finished', () => {
-          dispatch(setHitPlaying(false))
-        })
-    } else hitAction?.fadeOut(FADE_DURATION)
-  }, [hitPlaying])
-
-  useEffect(() => {
-    const blockAction = actions[names[blockAnimationIndex]]
-    if (blockPlaying && blockAction) {
-      blockAction.reset().fadeIn(FADE_DURATION).play()
-    } else blockAction?.fadeOut(FADE_DURATION)
-  })
 
   // set the toogable elements
   useEffect(() => {

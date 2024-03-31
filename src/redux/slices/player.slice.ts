@@ -7,8 +7,9 @@ const initialState: playerState = {
   nextAnimationIndex: -1,
   animationIndex: 36,
   animationDuration: 0.6,
-  hitPlaying: false,
-  blockPlaying: false,
+  dashAmount: 1,
+  dashCooldown: 1,
+  particlesActive: false,
   toogableElements: {},
   handSlotsFullList: {
     handRightSlot: [],
@@ -37,12 +38,6 @@ export const playerSlice = createSlice({
     setAnimationDuration: (state, action) => {
       state.animationDuration = action.payload
     },
-    setHitPlaying: (state, action) => {
-      state.hitPlaying = action.payload
-    },
-    setBlockPlaying: (state, action) => {
-      state.blockPlaying = action.payload
-    },
     setToogableElements: (state, action) => {
       state.toogableElements = { ...state.toogableElements, ...action.payload }
     },
@@ -54,6 +49,9 @@ export const playerSlice = createSlice({
     },
     setPosition: (state, action) => {
       state.position = action.payload
+    },
+    setParticlesActive: (state, action) => {
+      state.particlesActive = action.payload
     }
   }
 })
@@ -63,12 +61,11 @@ export const {
   setAnimations,
   setNextAnimationIndex,
   setAnimationDuration,
-  setHitPlaying,
-  setBlockPlaying,
   setToogableElements,
   setHandSlotsFullList,
   setHandSlots,
-  setPosition
+  setPosition,
+  setParticlesActive
 } = playerSlice.actions
 
 export default playerSlice.reducer

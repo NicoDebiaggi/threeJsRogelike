@@ -82,9 +82,9 @@ type GLTFResult = GLTF & {
 export const MapOne = (props: JSX.IntrinsicElements['group']) => {
   const { nodes, materials } = useGLTF('./models/mapOne.glb') as GLTFResult
   return (
-    <group {...props} dispose={null} position={[0, -1.5, 0]}>
+    <group {...props} dispose={null} position={[0, -1.5, 0]} rotation={[0, 0.7854, 0]}>
       {/* FLOOR */}
-      <RigidBody type='fixed' friction={8} colliders={false}>
+      <RigidBody type='fixed' friction={16} colliders={false}>
         <CuboidCollider name='floor' args={[24, 0.5, 24]} position={[0, 0.5, 0]} />
         <group position={[9, 0, 15]}>
           <mesh geometry={nodes.tileBrickB_largeCrackedA.geometry} material={materials['Stone.163']} position={[6, 0, 0]} />

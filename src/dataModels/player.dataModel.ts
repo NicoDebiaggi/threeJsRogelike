@@ -3,8 +3,9 @@ export interface playerState {
   nextAnimationIndex: number
   animationIndex: number
   animationDuration: number
-  hitPlaying: boolean
-  blockPlaying: boolean
+  dashCooldown: number
+  dashAmount: number
+  particlesActive: boolean
   toogableElements: {
     [key: string]: boolean
   }

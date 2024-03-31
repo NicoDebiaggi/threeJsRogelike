@@ -2,12 +2,12 @@ import { useKeyboardControls } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { euler, quat, RapierRigidBody } from '@react-three/rapier'
 import { Dispatch, UnknownAction } from '@reduxjs/toolkit'
-import { RefObject } from 'react'
+import { RefObject, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { animationIndexDictionary, Controls } from '@/dataModels'
 import { Istore } from '@/redux'
-import { setAnimationDuration, setAnimationIndex, setBlockPlaying, setHitPlaying, setNextAnimationIndex, setPosition } from '@/redux/slices'
+import { setAnimationDuration, setAnimationIndex, setNextAnimationIndex, setParticlesActive, setPosition } from '@/redux/slices'
 
 const handleMovement = ({
   body,
@@ -19,8 +19,10 @@ const handleMovement = ({
   dispatch,
   animationIndex,
   position,
-  hitPlaying,
-  blockPlaying
+  dashAmountLeft,
+  setDashAmountLeft,
+  dashKeyUp,
+  setDashKeyUp
 }: {
   body: RefObject<RapierRigidBody>
   isOnFloor: boolean
@@ -30,9 +32,11 @@ const handleMovement = ({
   get: () => any
   dispatch: Dispatch<UnknownAction>
   animationIndex: number
-  position: { x: number; y: number; z: number }
-  hitPlaying: boolean
-  blockPlaying: boolean
+  position: { x: number; y: number; z: number },
+  dashAmountLeft: number,
+  setDashAmountLeft: (value: number) => void,
+  dashKeyUp: boolean,
+  setDashKeyUp: (value: boolean) => void
 }) => {
   const currentPosition = body.current?.translation() || { x: 0, y: 0, z: 0 }
   if (currentPosition.x !== position.x || currentPosition.z !== position.z || currentPosition.y !== position.y) {
@@ -44,27 +48,23 @@ const handleMovement = ({
   const resultantForce = linvel ? Math.sqrt(linvel.x ** 2 + linvel.z ** 2) : 0
   let changeRotation = false
 
-  if (isOnFloor && keysPressed.jump) {
+  if (!keysPressed.jump) setDashKeyUp(true)
+
+  if (isOnFloor && keysPressed.jump && dashKeyUp && dashAmountLeft > 0) {
+    setDashKeyUp(false)
+    setDashAmountLeft(dashAmountLeft - 1)
     const eulerRot = euler().setFromQuaternion(quat(body.current?.rotation()), 'YXZ')
     impulse.x = Math.sin(eulerRot.y) * JUMP_FORCE
     impulse.z = Math.cos(eulerRot.y) * JUMP_FORCE
-    impulse.y = JUMP_FORCE / 2
     body.current?.setAngvel({ x: 0, y: 0, z: 0 }, true)
-    dispatch(setAnimationDuration(1))
-    dispatch(setAnimationIndex(animationIndexDictionary.Roll_Forward))
-    dispatch(setNextAnimationIndex(animationIndexDictionary.Jump_Idle))
+    dispatch(setAnimationIndex(animationIndexDictionary.Running_A))
+    dispatch(setAnimationDuration(0.3))
+    dispatch(setParticlesActive(true))
   } else {
-    if (keysPressed.attack && !hitPlaying && !blockPlaying && isOnFloor) {
-      dispatch(setHitPlaying(true))
-    }
-    /* if (!keysPressed.attack && hitPlaying) dispatch(setHitPlaying(false)) */
-    if (keysPressed.block && !hitPlaying && !blockPlaying && isOnFloor) {
-      dispatch(setBlockPlaying(true))
-    }
-    if ((!keysPressed.block && blockPlaying) || !isOnFloor) dispatch(setBlockPlaying(false))
     if (resultantForce < MAX_SPEED && isOnFloor) {
-      dispatch(setAnimationDuration(1))
+      dispatch(setAnimationDuration(0.6))
       dispatch(setNextAnimationIndex(-1))
+      dispatch(setParticlesActive(false))
       if (keysPressed.forward && !keysPressed.backward && !keysPressed.left && !keysPressed.right) {
         animationIndex !== animationIndexDictionary.Running_A && dispatch(setAnimationIndex(animationIndexDictionary.Running_A))
         impulse.z += MOVE_SPEED
@@ -164,12 +164,22 @@ interface handlePlayerPhysicsProps {
 export const handlePlayerPhysics = ({ body, isOnFloor }: handlePlayerPhysicsProps) => {
   const [_, get] = useKeyboardControls<Controls>()
   const dispatch = useDispatch()
-  const { position, hitPlaying, blockPlaying } = useSelector((state: Istore) => state.player)
-  const { animationIndex } = useSelector((state: Istore) => state.player)
+  const { position, animationIndex, dashAmount, dashCooldown } = useSelector((state: Istore) => state.player)
+  const [dashKeyUp, setDashKeyUp] = useState(false)
+  const [dashAmountLeft, setDashAmountLeft] = useState(dashAmount)
 
-  const JUMP_FORCE = 8
-  const MOVE_SPEED = 4
-  const MAX_SPEED = 8
+  useEffect(() => {
+    if (dashAmountLeft < dashAmount) {
+      const interval = setInterval(() => {
+        setDashAmountLeft(dashAmountLeft + 1)
+      }, dashCooldown * 1000)
+      return () => clearInterval(interval)
+    }
+  }, [dashAmountLeft, dashAmount, dashCooldown])
+
+  const JUMP_FORCE = 80
+  const MOVE_SPEED = 8
+  const MAX_SPEED = 10
   const TORQUE_MULTIPLIER = 0.2
 
   useFrame(() => {
@@ -183,8 +193,10 @@ export const handlePlayerPhysics = ({ body, isOnFloor }: handlePlayerPhysicsProp
       dispatch,
       animationIndex,
       position,
-      hitPlaying,
-      blockPlaying
+      dashAmountLeft,
+      setDashAmountLeft,
+      dashKeyUp,
+      setDashKeyUp
     })
     body.current?.applyImpulse(impulse, true)
 

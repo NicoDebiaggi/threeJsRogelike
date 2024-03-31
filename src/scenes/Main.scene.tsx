@@ -8,7 +8,7 @@ import { Knight, MapOne } from '@/models'
 import { Istore } from '@/redux'
 
 const cameraBaseConfig = {
-  position: [0, 13, -13]
+  position: [0, 16, -16]
 }
 
 const Main = () => {

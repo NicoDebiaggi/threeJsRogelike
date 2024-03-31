@@ -4008,6 +4008,11 @@ three-stdlib@^2.29.4:
     fflate "^0.6.9"
     potpack "^1.0.1"
 
+three.quarks@^0.11.2:
+  version "0.11.2"
+  resolved "https://registry.npmjs.org/three.quarks/-/three.quarks-0.11.2.tgz#31eabb4e4f75b073da246e5584b7ac1b49392fe5"
+  integrity sha512-u2VhKFxMx39YFssoRN0S2i82EdA1JTl5XJiF11W80jXNnIuK7IpZKB94g0GTqaYYYa24jJlc7+19lpoOWEwsrA==
+
 three@^0.162.0:
   version "0.162.0"
   resolved "https://registry.npmjs.org/three/-/three-0.162.0.tgz#b15a511f1498e0c42d4d00bbb411c7527b06097e"
