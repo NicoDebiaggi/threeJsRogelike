@@ -121,7 +121,7 @@ interface Props {
   active?: boolean
 }
 
-export const ParticlesNebula: React.FC<Props> = ({ position, rotation, active }: Props) => {
+export const Trail: React.FC<Props> = ({ position, rotation, active }: Props) => {
   const { scene } = useThree()
   const [particleSystem, setParticleSystem] = useState<Nebula>()
   const [isEmitting, setIsEmitting] = useState(false)
@@ -134,7 +134,7 @@ export const ParticlesNebula: React.FC<Props> = ({ position, rotation, active }:
   const velocityVector = new Vector3D(particleDirection.x, particleDirection.y+1, particleDirection.z)
 
   useEffect(() => {
-    const cubeMesh = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshPhongMaterial({ color: '#b36b0c'/* , emissive: '#bababa' */}))
+    const cubeMesh = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshPhongMaterial({ color: '#b36b0c', emissive: '#bababa'}))
     const emitter = NebulaEngine.createEmitter({ position: { x: position.x, y: position.y, z: position.z }, body: cubeMesh, lifeMin: 0.5, lifeMax: 1, positionLimit: new BoxZone(2)})
 
     NebulaEngine.particleSystem.addEmitter(emitter)

@@ -35,10 +35,10 @@ const Main = () => {
           <Knight />
         </group>
         <MapOne />
-        {/* <EffectComposer multisampling={0}>
-          <Bloom intensity={1.5} kernelSize={2} luminanceThreshold={0} luminanceSmoothing={0.3} />
+        <EffectComposer multisampling={0}>
+          {/* <Bloom intensity={1.5} kernelSize={2} luminanceThreshold={0} luminanceSmoothing={0.3} /> */}
           <Bloom intensity={1.5} kernelSize={4} luminanceThreshold={0} luminanceSmoothing={0.0} />
-        </EffectComposer> */}
+        </EffectComposer>
       </Suspense>
     </>
   )

@@ -4,10 +4,10 @@ import { useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTF } from 'three-stdlib'
 
-import { handlePlayerPhysics, initializeKnight, ParticleSystem } from '../index'
+import { handlePlayerPhysics, initializeKnight } from '../index'
 import { useSelector } from 'react-redux'
 import { Istore } from '@/redux'
-import { ParticlesNebula } from './utils/ThreeNebulaTest'
+import { Trail } from './utils/Trail.utility'
 
 export type GLTFResult = GLTF & {
   nodes: {
@@ -130,13 +130,7 @@ const Knight = (props: JSX.IntrinsicElements['group']) => {
 
   return (
     <>
-      {/* <ParticleSystem
-        count={100}
-        active={particlesActive}
-        position={new THREE.Vector3(position.x, position.y, position.z)}
-        rotation={new THREE.Euler(bodyEulerRot.x, bodyEulerRot.y, bodyEulerRot.z)}
-      /> */}
-      <ParticlesNebula
+      <Trail
         position={new THREE.Vector3(position.x, position.y, position.z)}
         rotation={new THREE.Euler(bodyEulerRot.x, bodyEulerRot.y, bodyEulerRot.z)}
         active={particlesActive}
