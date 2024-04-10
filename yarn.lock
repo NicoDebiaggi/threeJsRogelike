@@ -3477,7 +3477,7 @@ postcss@^8.4.35:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-postprocessing@^6.32.1:
+postprocessing@^6.32.1, postprocessing@^6.35.3:
   version "6.35.3"
   resolved "https://registry.npmjs.org/postprocessing/-/postprocessing-6.35.3.tgz#98cc67a418487e66ec83ee124a090cc5db857b62"
   integrity sha512-PH0/gqVYpp+vZjmSAohG/xH0u9FpbjfCGsFMsmsZVd8XXSmqJUR7b5C9ZFE/iMrWhe+tiTOFN9WvcEdjLI8LYQ==

@@ -177,7 +177,7 @@ export const handlePlayerPhysics = ({ body, isOnFloor }: handlePlayerPhysicsProp
     }
   }, [dashAmountLeft, dashAmount, dashCooldown])
 
-  const JUMP_FORCE = 80
+  const JUMP_FORCE = 100
   const MOVE_SPEED = 8
   const MAX_SPEED = 10
   const TORQUE_MULTIPLIER = 0.2

@@ -6,7 +6,8 @@ import * as THREE from 'three'
 
 import { Knight, MapOne } from '@/models'
 import { Istore } from '@/redux'
-import { Bloom, EffectComposer } from '@react-three/postprocessing'
+import { Bloom, EffectComposer, SSAO, Vignette } from '@react-three/postprocessing'
+import { BlendFunction } from 'postprocessing'
 
 const cameraBaseConfig = {
   position: [0, 16, -16]
@@ -35,9 +36,10 @@ const Main = () => {
           <Knight />
         </group>
         <MapOne />
-        <EffectComposer multisampling={0}>
-          {/* <Bloom intensity={1.5} kernelSize={2} luminanceThreshold={0} luminanceSmoothing={0.3} /> */}
-          <Bloom intensity={1.5} kernelSize={4} luminanceThreshold={0} luminanceSmoothing={0.0} />
+        <EffectComposer>
+          <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={600} intensity={3} />
+          <Vignette offset={0.2} darkness={0.5} />
+          <SSAO samples={30} radius={20} luminanceInfluence={0.9} blendFunction={BlendFunction.MULTIPLY} worldDistanceThreshold={1} worldDistanceFalloff={1} worldProximityThreshold={1} worldProximityFalloff={1}/>
         </EffectComposer>
       </Suspense>
     </>
