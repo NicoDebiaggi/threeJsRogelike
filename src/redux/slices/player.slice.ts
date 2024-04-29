@@ -19,7 +19,8 @@ const initialState: playerState = {
     handRightSlot: '',
     handLeftSlot: ''
   },
-  position: { x: 0, y: 0, z: 0 }
+  position: { x: 0, y: 0, z: 0 },
+  rotation: { x: 0, y: 0, z: 0 }
 }
 
 export const playerSlice = createSlice({
@@ -50,6 +51,9 @@ export const playerSlice = createSlice({
     setPosition: (state, action) => {
       state.position = action.payload
     },
+    setRotation: (state, action) => {
+      state.rotation = action.payload
+    },
     setParticlesActive: (state, action) => {
       state.particlesActive = action.payload
     }
@@ -65,6 +69,7 @@ export const {
   setHandSlotsFullList,
   setHandSlots,
   setPosition,
+  setRotation,
   setParticlesActive
 } = playerSlice.actions
 

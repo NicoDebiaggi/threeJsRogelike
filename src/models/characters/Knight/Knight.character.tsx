@@ -1,5 +1,5 @@
 import { useGLTF } from '@react-three/drei'
-import { CapsuleCollider, euler, quat, RapierRigidBody, RigidBody } from '@react-three/rapier'
+import { CapsuleCollider, euler, interactionGroups, quat, RapierRigidBody, RigidBody } from '@react-three/rapier'
 import { useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTF } from 'three-stdlib'
@@ -8,6 +8,7 @@ import { handlePlayerPhysics, initializeKnight } from '../index'
 import { useSelector } from 'react-redux'
 import { Istore } from '@/redux'
 import { Trail } from './utils/Trail.utility'
+import { InteractionGroupsDictionary } from '@/dataModels'
 
 export type GLTFResult = GLTF & {
   nodes: {
@@ -124,6 +125,7 @@ const Knight = (props: JSX.IntrinsicElements['group']) => {
   const rigidBody = useRef<RapierRigidBody>(null)
   const [isOnFloor, setIsOnFloor] = useState(false)
   const { position, particlesActive } = useSelector((state: Istore) => state.player)
+  const { Map, Player, Default, EnemyRange } = InteractionGroupsDictionary
   initializeKnight({ group, animations, nodes })
   handlePlayerPhysics({ body: rigidBody, isOnFloor })
   const bodyEulerRot = euler().setFromQuaternion(quat(rigidBody.current?.rotation()), 'YXZ')
@@ -149,7 +151,12 @@ const Knight = (props: JSX.IntrinsicElements['group']) => {
             if (e.colliderObject?.name === 'floor') setIsOnFloor(false)
           }}
         >
-          <CapsuleCollider args={[0.55, 0.65]} position={[0, 1.2, 0]} />
+          <CapsuleCollider
+            name='player'
+            args={[0.55, 0.65]}
+            position={[0, 1.2, 0]}
+            collisionGroups={interactionGroups(Player, [Map, Default, EnemyRange])}
+          />
           <group name='Scene'>
             <group name='Rig'>
               <primitive object={nodes.root} />

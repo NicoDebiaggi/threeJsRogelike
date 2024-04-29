@@ -1,9 +1,10 @@
 import { useGLTF } from '@react-three/drei'
-import { CuboidCollider, RigidBody } from '@react-three/rapier'
+import { CuboidCollider, RigidBody, interactionGroups } from '@react-three/rapier'
 import * as THREE from 'three'
 import { GLTF } from 'three-stdlib'
 
 import { WallTorch } from '@/models'
+import { InteractionGroupsDictionary } from '@/dataModels'
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -81,11 +82,12 @@ type GLTFResult = GLTF & {
 
 export const MapOne = (props: JSX.IntrinsicElements['group']) => {
   const { nodes, materials } = useGLTF('./models/mapOne.glb') as GLTFResult
+  const { Map, Enemy, Player, Default } = InteractionGroupsDictionary
   return (
     <group {...props} dispose={null} position={[0, -1.5, 0]} rotation={[0, 0.7854, 0]}>
       {/* FLOOR */}
       <RigidBody type='fixed' friction={16} colliders={false}>
-        <CuboidCollider name='floor' args={[24, 0.5, 24]} position={[0, 0.5, 0]} />
+        <CuboidCollider collisionGroups={interactionGroups(Map, [Enemy, Player, Default])} name='floor' args={[24, 0.5, 24]} position={[0, 0.5, 0]} />
         <group position={[9, 0, 15]}>
           <mesh geometry={nodes.tileBrickB_largeCrackedA.geometry} material={materials['Stone.163']} position={[6, 0, 0]} />
           <mesh geometry={nodes.tileBrickB_largeCrackedA001.geometry} material={materials['Stone.163']} position={[-6, 0, -6]} />
@@ -236,10 +238,10 @@ export const MapOne = (props: JSX.IntrinsicElements['group']) => {
       {/* WALLS */}
       <RigidBody type='fixed' friction={0} colliders={false} position={[9, 0, 15]}>
         {/* 4 wall coliders */}
-        <CuboidCollider args={[1, 4, 24]} position={[15, 5, -15]} />
-        <CuboidCollider args={[1, 4, 24]} position={[-33, 5, -15]} />
-        <CuboidCollider args={[1, 4, 24]} position={[-9, 5, -39]} rotation={[0, 1.571, 0]} />
-        <CuboidCollider args={[1, 4, 24]} position={[-9, 5, 9]} rotation={[0, 1.571, 0]} />
+        <CuboidCollider args={[1, 4, 24]} position={[15, 5, -15]} collisionGroups={interactionGroups(Map, [Enemy, Player, Default])} />
+        <CuboidCollider args={[1, 4, 24]} position={[-33, 5, -15]} collisionGroups={interactionGroups(Map, [Enemy, Player, Default])} />
+        <CuboidCollider args={[1, 4, 24]} position={[-9, 5, -39]} rotation={[0, 1.571, 0]} collisionGroups={interactionGroups(Map, [Enemy, Player, Default])} />
+        <CuboidCollider args={[1, 4, 24]} position={[-9, 5, 9]} rotation={[0, 1.571, 0]} collisionGroups={interactionGroups(Map, [Enemy, Player, Default])} />
         <group>
           <group position={[7, 1, 9]}>
             <mesh geometry={nodes.Cube217.geometry} material={materials['Stone.217']} />

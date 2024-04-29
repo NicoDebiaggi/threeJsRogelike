@@ -1,3 +1,5 @@
 export * from './assets'
 export * from './characters'
 export * from './maps'
+export * from './weapons'
+export * from './enemies'

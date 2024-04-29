@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { animationIndexDictionary, Controls } from '@/dataModels'
 import { Istore } from '@/redux'
-import { setAnimationDuration, setAnimationIndex, setNextAnimationIndex, setParticlesActive, setPosition } from '@/redux/slices'
+import { setAnimationDuration, setAnimationIndex, setNextAnimationIndex, setParticlesActive, setPosition, setRotation } from '@/redux/slices'
+import * as THREE from 'three'
 
 const handleMovement = ({
   body,
@@ -19,6 +20,7 @@ const handleMovement = ({
   dispatch,
   animationIndex,
   position,
+  rotation,
   dashAmountLeft,
   setDashAmountLeft,
   dashKeyUp,
@@ -33,12 +35,18 @@ const handleMovement = ({
   dispatch: Dispatch<UnknownAction>
   animationIndex: number
   position: { x: number; y: number; z: number },
+  rotation: { x: number; y: number; z: number },
   dashAmountLeft: number,
   setDashAmountLeft: (value: number) => void,
   dashKeyUp: boolean,
   setDashKeyUp: (value: boolean) => void
 }) => {
   const currentPosition = body.current?.translation() || { x: 0, y: 0, z: 0 }
+  const eulerRot = euler().setFromQuaternion(quat(body.current?.rotation()), 'YXZ')
+  const newRotation = new THREE.Euler(eulerRot.x, eulerRot.y, eulerRot.z)
+  if (newRotation.x !== rotation.x || newRotation.z !== rotation.z || newRotation.y !== rotation.y) {
+    dispatch(setRotation({ x: newRotation.x, y: newRotation.y, z: newRotation.z }))
+  }
   if (currentPosition.x !== position.x || currentPosition.z !== position.z || currentPosition.y !== position.y) {
     dispatch(setPosition({ x: currentPosition.x, y: currentPosition.y, z: currentPosition.z }))
   }
@@ -53,7 +61,6 @@ const handleMovement = ({
   if (isOnFloor && keysPressed.jump && dashKeyUp && dashAmountLeft > 0) {
     setDashKeyUp(false)
     setDashAmountLeft(dashAmountLeft - 1)
-    const eulerRot = euler().setFromQuaternion(quat(body.current?.rotation()), 'YXZ')
     impulse.x = Math.sin(eulerRot.y) * JUMP_FORCE
     impulse.z = Math.cos(eulerRot.y) * JUMP_FORCE
     body.current?.setAngvel({ x: 0, y: 0, z: 0 }, true)
@@ -164,7 +171,7 @@ interface handlePlayerPhysicsProps {
 export const handlePlayerPhysics = ({ body, isOnFloor }: handlePlayerPhysicsProps) => {
   const [_, get] = useKeyboardControls<Controls>()
   const dispatch = useDispatch()
-  const { position, animationIndex, dashAmount, dashCooldown } = useSelector((state: Istore) => state.player)
+  const { position, animationIndex, dashAmount, dashCooldown, rotation } = useSelector((state: Istore) => state.player)
   const [dashKeyUp, setDashKeyUp] = useState(false)
   const [dashAmountLeft, setDashAmountLeft] = useState(dashAmount)
 
@@ -177,9 +184,9 @@ export const handlePlayerPhysics = ({ body, isOnFloor }: handlePlayerPhysicsProp
     }
   }, [dashAmountLeft, dashAmount, dashCooldown])
 
-  const JUMP_FORCE = 100
-  const MOVE_SPEED = 8
-  const MAX_SPEED = 10
+  const JUMP_FORCE = 80
+  const MOVE_SPEED = 6
+  const MAX_SPEED = 8
   const TORQUE_MULTIPLIER = 0.2
 
   useFrame(() => {
@@ -193,6 +200,7 @@ export const handlePlayerPhysics = ({ body, isOnFloor }: handlePlayerPhysicsProp
       dispatch,
       animationIndex,
       position,
+      rotation,
       dashAmountLeft,
       setDashAmountLeft,
       dashKeyUp,

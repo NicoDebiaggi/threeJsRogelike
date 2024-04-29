@@ -1,15 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { playerState } from '@/dataModels'
+import { enemyState, playerState } from '@/dataModels'
 
-import { playerReducer } from './slices'
+import { enemiesReducer, playerReducer } from './slices'
 
 export interface Istore {
   player: playerState
+  enemies: enemyState[]
 }
 
 export default configureStore({
   reducer: {
-    player: playerReducer
+    player: playerReducer,
+    enemies: enemiesReducer
   }
 })
