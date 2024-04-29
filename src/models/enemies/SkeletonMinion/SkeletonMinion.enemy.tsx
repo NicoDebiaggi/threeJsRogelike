@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as THREE from 'three'
 import { SkeletonMinionModel } from './SkeletonMinion.model'
 import { ActionNameSkeletonMinion } from './SkeletonMinion.dataModel'
+import { distance } from 'three/examples/jsm/nodes/Nodes.js'
 
 interface SkeletonMinionProps {
   enemyId: string
@@ -33,6 +34,7 @@ export const SkeletonMinion = ({ enemyId, initialPosition, hp }: SkeletonMinionP
 
   const playerPos = new THREE.Vector3(playerPosition.x, playerPosition.y, playerPosition.z)
   const enemyPos = new THREE.Vector3(enemyPosition?.x, enemyPosition?.y, enemyPosition?.z)
+  const distanceToPlayer = playerPos.distanceTo(enemyPos)
   const direction = playerPos.sub(enemyPos).normalize()
 
   useEffect(() => {
@@ -67,7 +69,7 @@ export const SkeletonMinion = ({ enemyId, initialPosition, hp }: SkeletonMinionP
     const position = enemyRef.current?.translation()
     if (position && !onRange && finishSpawn && !isDead) {
       if (position.y < -2) {
-        onKill()
+        dispatch(removeEnemy(enemyId))
         return
       }
       const newPosition = new THREE.Vector3(position.x + direction.x * speed, position.y, position.z + direction.z * speed)
@@ -81,17 +83,16 @@ export const SkeletonMinion = ({ enemyId, initialPosition, hp }: SkeletonMinionP
       setLookAtPlayer(true)
     }
     // if distanceTo player is more than 1.5, setOnRange to false
-    if (enemyPosition) {
-      if (enemyPosition.distanceTo(playerPos) > 3 && onRange && !isDead) {
+    if (distanceToPlayer) {
+      if (distanceToPlayer > 3 && onRange && !isDead) {
         setOnRange(false)
       }
-      if (enemyPosition.distanceTo(playerPos) <= 3 && !onRange && !isDead) {
+      if (distanceToPlayer <= 3 && !onRange && !isDead) {
         setOnRange(true)
       }
     }
   })
 
-  //TODO: enemies stop moving when player isnt moving, the problem is that distanceToPlayer is not being updated
   //TODO: performance issue when the program runs for a long time
   const handleHit = (weaponDamage: number) => {
     if (isDead) return
@@ -113,18 +114,18 @@ export const SkeletonMinion = ({ enemyId, initialPosition, hp }: SkeletonMinionP
       <CylinderCollider
         sensor
         args={[1.1, 3]}
-        position={[enemyPosition.x, enemyPosition.y + 2.2, enemyPosition.z]}
+        position={[enemyPosition.x, enemyPosition.y + 0.4, enemyPosition.z]}
         collisionGroups={interactionGroups(EnemyRange, [Player, Default])}
         name='enemyRange'
         onIntersectionEnter={e => {
           if (e.colliderObject?.name === 'player') {
-            console.log('Player in range')
+            /* console.log('Player in range') */
             //atack fn
           }
         }}
         onIntersectionExit={e => {
           if (e.colliderObject?.name === 'player') {
-            console.log('Player out of range')
+            /* console.log('Player out of range') */
           }
         }}
       />

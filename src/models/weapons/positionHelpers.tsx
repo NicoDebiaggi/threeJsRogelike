@@ -27,10 +27,9 @@ export const handleWeaponMovementFrame = ({
 
   // position the weapon between the player and the enemy at a distance of weaponRange
   const weaponDirection = playerPosition.clone().sub(enemyPosition).normalize()
-  const weaponPositionTarget = enemyPosition.clone().add(weaponDirection.multiplyScalar(0.2))
-  const lerp = weaponPosition.lerp(weaponPositionTarget, 0.1)
-  if (weaponPosition !== lerp) newWeaponPosition = lerp
+  const weaponPositionTarget = enemyPosition.clone().add(weaponDirection.multiplyScalar(weaponRange))
 
+  newWeaponPosition = weaponPosition.clone().lerp(weaponPositionTarget, 0.1)
   const weaponInPosition = weaponDistanceToEnemy <= weaponRange
   return { newWeaponPosition, newWeaponRotation, weaponInPosition }
 }

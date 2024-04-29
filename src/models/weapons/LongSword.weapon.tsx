@@ -98,7 +98,6 @@ export const LongSword = (props: JSX.IntrinsicElements['group']) => {
     }
 
     //TODO: add shaders fx to the weapon while attacking
-    //TODO: checkout for the weapon hitting with the handle instead of the blade
 
     // move the weapon to the enemy position
     if (enemyPosition) {
@@ -109,7 +108,9 @@ export const LongSword = (props: JSX.IntrinsicElements['group']) => {
         weaponRotation,
         weaponRange
       })
-      if (weaponPosition !== newWeaponPosition) setWeaponPosition(newWeaponPosition)
+      if (weaponPosition !== newWeaponPosition) {
+        setWeaponPosition(newWeaponPosition)
+      }
       if (weaponRotation !== newWeaponRotation) setWeaponRotation(newWeaponRotation)
       if (weaponInPosition && !weaponAttacking) {
         setWeaponAttacking(true)
@@ -118,7 +119,7 @@ export const LongSword = (props: JSX.IntrinsicElements['group']) => {
     }
 
     // move the weapon to the player position
-    if (!weaponAttacking) {
+    if (!enemyPosition && !weaponAttacking) {
       const opositeDirection = playerDirection.clone().negate()
       const newWeaponPosition = new THREE.Vector3(
         playerPosition.x + opositeDirection.x * 1.5,
@@ -169,7 +170,7 @@ export const LongSword = (props: JSX.IntrinsicElements['group']) => {
           weaponDamage
         }}
       >
-        <CuboidCollider args={[0.3, 1.4, 0.1]} position={[0, 2, 0]} name='weapon' sensor />
+        <CuboidCollider args={[0.3, 1.2, 0.1]} position={[0, 2.7, 0]} name='weapon' sensor />
       </RigidBody>
       <Float speed={7} rotationIntensity={0} floatIntensity={weaponAttacking ? 0 : 0.5} floatingRange={[0, 1]}>
         <group
