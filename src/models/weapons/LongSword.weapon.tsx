@@ -98,6 +98,7 @@ export const LongSword = (props: JSX.IntrinsicElements['group']) => {
     }
 
     //TODO: add shaders fx to the weapon while attacking
+    //TODO: fix hitbox position and rotation
 
     // move the weapon to the enemy position
     if (enemyPosition) {
